@@ -111,6 +111,7 @@ private:
 
 	CBigInt add(const CBigInt &addendum2) const;
 	bool cmpabsless(const CBigInt &rhoperand) const;
+	CBigInt multbydigit(int mult) const;
 };
 
 // Default constructor
@@ -209,7 +210,7 @@ CBigInt CBigInt::operator + (const CBigInt &addendum2) const
 
 
 // Adding two positives
-CBigInt CBigInt::add (const CBigInt &addendum2) const
+CBigInt CBigInt::add(const CBigInt &addendum2) const
 {
 	const string &a1 = this->m_Number;
 	const string &a2 = addendum2.m_Number;
@@ -335,9 +336,61 @@ CBigInt operator + (string addendum1, CBigInt addendum2)
 	return 0;
 }
 
-CBigInt CBigInt::operator * (CBigInt factor2) const
+// Helper for multiplier by one digit
+CBigInt CBigInt::multbydigit(int mult) const
 {
-	cout << "I can do CBigInt + CBigInt" << endl;
+	string::const_reverse_iterator it;
+	const string &a = this->m_Number;
+	CBigInt res;
+	int carry = 0;
+
+	res.m_Number.erase(res.m_Number.begin());
+
+	for (it = a.rbegin(); it != a.rend(); it++) {
+		int f1 = *it - '0';
+		int prod = f1 * mult + carry;
+		char c = (prod % 10) + '0';
+		carry = prod / 10; 
+		res.m_Number.insert(res.m_Number.begin(), c);
+	}
+	if (carry > 0) {
+		res.m_Number.insert(res.m_Number.begin(), carry + '0');
+	}
+	cout << *this << " * " << mult << " = "  << res << endl;
+	return res;
+}
+
+// returns CBigInt
+CBigInt CBigInt::operator *(CBigInt factor2) const
+{
+	string::const_reverse_iterator it;
+	const string &a = factor2.m_Number;
+	CBigInt res;
+	int carry = 0;
+	int pad0num = 0;
+
+	for (it = a.rbegin(); it != a.rend(); it++, pad0num++) {
+		int mult = *it - '0';
+		CBigInt r1 = this->multbydigit(mult);
+		// append zeros
+		for(int i = 0; i < pad0num; i++) {
+			r1.m_Number.push_back('0');
+		}
+		res = res + r1;
+	}
+
+	// Erase leading zeroes
+	string::iterator it3;
+	
+	while(1) {
+		it3 = res.m_Number.begin();
+		if (*it3 != '0' || res.m_Number.size() == 1) {
+			break;
+		}
+	       	res.m_Number.erase(it3);
+	}
+
+	cout << *this << " * " << factor2  << " = " << res << endl;
 	return 0;
 }
 
@@ -612,6 +665,7 @@ int main ( void )
 	cout << CBigInt("456") + CBigInt("229") << endl;
 	cout << CBigInt("-123") + CBigInt("-16") << endl;
 	cout << CBigInt("000001") + CBigInt("-8956") << endl;
+	cout << CBigInt("12345") * CBigInt("0") << endl;
 	cout << num1 - num2 << endl;
 	
 	return 0;
