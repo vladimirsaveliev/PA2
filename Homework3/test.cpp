@@ -30,7 +30,7 @@ class CBigInt
 	CBigInt (const string &s);
 
 	// copying/assignment/destruction
-	~CBigInt() { cout << "I am CBigInt destructor" << endl; }
+	~CBigInt() { }
 
 	// operator +, any combination {CBigInt/int/string} + {CBigInt/int/string}
 	CBigInt operator + (const CBigInt &addendum2) const;
@@ -314,19 +314,16 @@ CBigInt CBigInt::operator - (const CBigInt &sub) const
 
 CBigInt CBigInt::operator + (int addendum2) const
 {
-	cout << "I can do CBigInt + int" << endl;
 	return 0;
 }
 
 CBigInt CBigInt::operator + (string addendum2) const
 {
-	cout << "I can do CBigInt + string" << endl;
 	return 0;
 }
 
 CBigInt operator + (int addendum1, CBigInt addendum2)
 {
-	cout << "I can do int + CBigInt" << endl;
 	return 0;
 }
 
@@ -366,7 +363,6 @@ CBigInt CBigInt::operator *(CBigInt factor2) const
 	string::const_reverse_iterator it;
 	const string &a = factor2.m_Number;
 	CBigInt res;
-	int carry = 0;
 	int pad0num = 0;
 
 	for (it = a.rbegin(); it != a.rend(); it++, pad0num++) {
@@ -630,22 +626,73 @@ bool operator != (string lhoperand, CBigInt rhoperand)
 ostream & operator << (ostream & os, const CBigInt &x)
 {
 	if (x.m_Positive == false) {
-		cout << "-" << x.m_Number;
+		os << "-" << x.m_Number;
 	} else {
-		cout << x.m_Number;
+		os << x.m_Number;
 	}
 
 	return os;
 }
 
+//
+// valid input:
+//  "   1234" -> 1234
+//  "+0001" -> 1
+//  "-0111" -> -111
+//  "0000" -> 0
+//  is no decimal digits - failbit is set on is
 istream & operator >> (istream  & is, CBigInt &x)
 {
-	cout << "This is me, I can read CBigInt from input stream" << endl;
-	x = 0;
+	char c;
+	bool whitespaceok = true;
+	bool signok = true;
+	int lead0num = 0;
+
+	x.m_Number = "";
+
+	while ((c = is.peek()) != EOF) {
+		c = is.get();
+		if (whitespaceok) {
+			if (isspace(c)) {
+				continue;
+			}
+			/* no space anymore */
+			whitespaceok = false;
+		}
+		
+		if (signok) {
+			if (c == '-' || c == '+') {
+				x.m_Positive = (c == '+');
+				signok = false;
+				continue;
+			}
+		}
+
+		/* only digits */
+		if (!isdigit(c)) {
+			break;
+		}
+		whitespaceok = false;
+		signok = false;
+
+		/* skip leading '0' */
+		if (x.m_Number.size() == 0 &&  c == '0') {
+			lead0num++;
+			continue;
+		}
+
+		x.m_Number.push_back(c);
+	}
+
+	if (x.m_Number.size() == 0) {
+		if (lead0num)
+			x.m_Number.push_back('0');
+		else
+			is.setstate(ios::failbit);
+	}
+
 	return is;
 }
-
-
 
 
 #ifndef __PROGTEST__
@@ -657,19 +704,6 @@ static bool equal ( const CBigInt & x, const char * val )
 }
 int main ( void )
 {
-	CBigInt num1(string ("1000")); // Default constructor
-	
-	CBigInt num2("1000"); // CBigInt with int constructor
-	
-
-	cout << CBigInt("456") + CBigInt("229") << endl;
-	cout << CBigInt("-123") + CBigInt("-16") << endl;
-	cout << CBigInt("000001") + CBigInt("-8956") << endl;
-	cout << CBigInt("12345") * CBigInt("0") << endl;
-	cout << num1 - num2 << endl;
-	
-	return 0;
-
   CBigInt a, b;
   istringstream is;
   a = 10;
