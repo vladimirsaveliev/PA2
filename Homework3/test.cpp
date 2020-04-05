@@ -696,6 +696,7 @@ istream & operator >> (istream  & is, CBigInt &x)
 	int lead0num = 0;
 
 	x.m_Number = "";
+	x.m_Positive = true;
 
 	while ((c = is.peek()) != EOF) {
 		c = is.get();
@@ -813,6 +814,12 @@ int main ( void )
   b = a * "15";
   assert ( equal ( b, "150" ) );
   assert ( equal ( a, "10" ) );
+
+// 
+  is . clear ();
+  is . str ( "-999" );
+  assert ( is >> b );
+  assert ( equal ( b, "-999" ) );
 
   is . clear ();
   is . str ( " 1234" );
