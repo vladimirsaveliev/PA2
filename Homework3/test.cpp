@@ -489,6 +489,19 @@ bool CBigInt::cmpabsless(const CBigInt &rhoperand) const
 
 bool CBigInt::operator < (const CBigInt & rhoperand) const
 {
+	if (this->m_Positive == true && rhoperand.m_Positive == false) {
+		// + and -
+		return false;
+	}
+	if (this->m_Positive == false && rhoperand.m_Positive == true) {
+		// - and +
+		return true;
+	}
+	if (this->m_Positive == false && rhoperand.m_Positive == false) {
+		// - and -
+		return !(this->cmpabsless(rhoperand));
+	}
+	// + and +
 	return this->cmpabsless(rhoperand);
 }
 
