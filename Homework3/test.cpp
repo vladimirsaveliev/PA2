@@ -32,10 +32,12 @@ class CBigInt
 	// copying/assignment/destruction
 	~CBigInt() { }
 
+	CBigInt & operator = (const string & str);
+
 	// operator +, any combination {CBigInt/int/string} + {CBigInt/int/string}
 	CBigInt operator + (const CBigInt &addendum2) const;
 	CBigInt operator + (int addendum2) const;
-	CBigInt operator + (string addendum2) const;
+	CBigInt operator + (const string & addendum2) const;
 	friend CBigInt operator + (int addendum1, CBigInt addendum2);
 	friend CBigInt operator + (string addendum1, CBigInt addendum2);
 
@@ -186,6 +188,13 @@ CBigInt::CBigInt(const string &s)
 	}
 }
 
+// CBitInt = (string)
+CBigInt & CBigInt::operator = (const string & str)
+{
+	*this = CBigInt(str);
+	return *this;
+}
+
 // operator +.
 // Cases: *this and addendum2 > 0
 //        *this and addendum2 < 0
@@ -312,6 +321,7 @@ CBigInt CBigInt::operator - (const CBigInt &sub) const
        	return res;
 }
 
+// CBigInt + int
 CBigInt CBigInt::operator + (int addendum2) const
 {
 	CBigInt b(addendum2);
@@ -319,9 +329,12 @@ CBigInt CBigInt::operator + (int addendum2) const
 	return *this + b;
 }
 
-CBigInt CBigInt::operator + (string addendum2) const
+// CBigInt + string
+CBigInt CBigInt::operator + (const string & addendum2) const
 {
-	return 0;
+	CBigInt b(addendum2);
+	
+	return *this + b;
 }
 
 CBigInt operator + (int addendum1, CBigInt addendum2)
@@ -417,6 +430,7 @@ CBigInt operator * (string factor1, CBigInt factor2)
 	return 0;
 }
 
+// CBigInt += int
 CBigInt & CBigInt::operator += (int rhoperand)
 {
 	CBigInt b(rhoperand);
@@ -424,18 +438,22 @@ CBigInt & CBigInt::operator += (int rhoperand)
 	return *this;
 }
 
+// CBigInt += CBigInt
 CBigInt & CBigInt::operator +=(const CBigInt &rhoperand)
 {
-	cout << "I can do CBigInt += CBigInt" << endl;
+	*this = *this + rhoperand;
 	return *this;
 }
 
+// CBigInt += string
 CBigInt & CBigInt::operator +=(const string &rhoperand)
 {
-	cout << "I can do CBigInt + int" << endl;
+	CBigInt b(rhoperand);
+	*this = *this + b;
 	return *this;
 }
 
+// CBigInt *= int
 CBigInt & CBigInt::operator *=(int rhoperand)
 {
 	CBigInt b(rhoperand);
@@ -443,15 +461,18 @@ CBigInt & CBigInt::operator *=(int rhoperand)
 	return *this;
 }
 
+// CBigInt *= CBigInt
 CBigInt & CBigInt::operator *=(const CBigInt & rhoperand)
 {
-	cout << "I can do CBigInt + int" << endl;
-       	return *this;
+	*this = *this * rhoperand;
+	return *this;
 }
 
+// CBigInt *= string
 CBigInt & CBigInt::operator *=(const string & rhoperand)
 {
-	cout << "I can do CBigInt + int" << endl;
+	CBigInt b(rhoperand);
+	*this = *this * b;
 	return *this;
 }
 
@@ -732,7 +753,7 @@ int main ( void )
   b = a * -7;
   assert ( equal ( b, "350" ) );
   assert ( equal ( a, "-50" ) );
-#if 0
+#if 1
   a = "12345678901234567890";
   a += "-99999999999999999999";
   assert ( equal ( a, "-87654321098765432109" ) );
