@@ -38,8 +38,8 @@ class CBigInt
 	CBigInt operator + (const CBigInt &addendum2) const;
 	CBigInt operator + (int addendum2) const;
 	CBigInt operator + (const string & addendum2) const;
-	friend CBigInt operator + (int addendum1, CBigInt addendum2);
-	friend CBigInt operator + (string addendum1, CBigInt addendum2);
+	friend CBigInt operator + (int addendum1, const CBigInt & addendum2);
+	friend CBigInt operator + (const string & addendum1, const CBigInt & addendum2);
 
 	// For substraction
 	CBigInt operator - (const CBigInt &sub) const;
@@ -48,8 +48,8 @@ class CBigInt
 	CBigInt operator * (const CBigInt & factor2) const;
 	CBigInt operator * (int factor2) const;
 	CBigInt operator * (const string & factor2) const;
-	friend CBigInt operator * (int factor1, CBigInt factor2);
-	friend CBigInt operator * (string factor1, CBigInt factor2);
+	friend CBigInt operator * (int factor1, const CBigInt & factor2);
+	friend CBigInt operator * (const string & factor1, const CBigInt & factor2);
 	// operator +=, any of {CBigInt/int/string}
 	CBigInt & operator +=(int rhoperand);
 	CBigInt & operator +=(const CBigInt & rhoperand);
@@ -63,43 +63,43 @@ class CBigInt
 	bool operator < (const CBigInt & rhoperand) const;
 	bool operator < (int rhoperand) const;
 	bool operator < (const string & rhoperand) const;
-	friend bool operator < (int lhoperand, CBigInt rhoperand);
-	friend bool operator < (string lhoperand, CBigInt rhoperand);
+	friend bool operator < (int lhoperand, const CBigInt & rhoperand);
+	friend bool operator < (const string & lhoperand, const CBigInt & rhoperand);
 
 	//  Less or equal 
 	bool operator <= (const CBigInt & rhoperand) const;
 	bool operator <= (int rhoperand) const;
 	bool operator <= (const string & rhoperand) const;
-	friend bool operator <= (int lhoperand, CBigInt rhoperand);
-	friend bool operator <= (string lhoperand, CBigInt rhoperand);
+	friend bool operator <= (int lhoperand, const CBigInt & rhoperand);
+	friend bool operator <= (const string & lhoperand, const CBigInt & rhoperand);
 
 	// >
 	bool operator > (const CBigInt & rhoperand) const;
 	bool operator > (int rhoperand) const;
 	bool operator > (const string & rhoperand) const;
-	friend bool operator > (int lhoperand, CBigInt rhoperand);
-	friend bool operator > (string lhoperand, CBigInt rhoperand);
+	friend bool operator > (int lhoperand, const CBigInt & rhoperand);
+	friend bool operator > (const string & lhoperand, const CBigInt & rhoperand);
 
 	// >=
 	bool operator >= (const CBigInt & rhoperand) const;
 	bool operator >= (int rhoperand) const;
 	bool operator >= (const string & rhoperand) const;
-	friend bool operator >= (int lhoperand, CBigInt rhoperand);
-	friend bool operator >= (string lhoperand, CBigInt rhoperand);
+	friend bool operator >= (int lhoperand, const CBigInt & rhoperand);
+	friend bool operator >= (const string & lhoperand, const CBigInt & rhoperand);
 
 	// ==
 	bool operator == (const CBigInt & rhoperand) const;
 	bool operator == (int rhoperand) const;
 	bool operator == (const string & rhoperand) const;
-	friend bool operator == (int lhoperand, CBigInt rhoperand);
-	friend bool operator == (string lhoperand, CBigInt rhoperand);
+	friend bool operator == (int lhoperand, const CBigInt & rhoperand);
+	friend bool operator == (const string & lhoperand, const CBigInt & rhoperand);
 
 	// !=
 	bool operator != (const CBigInt & rhoperand) const;
 	bool operator != (int rhoperand) const;
 	bool operator != (const string & rhoperand) const;
-	friend bool operator != (int lhoperand, CBigInt rhoperand);
-	friend bool operator != (string lhoperand, CBigInt rhoperand);
+	friend bool operator != (int lhoperand, const CBigInt & rhoperand);
+	friend bool operator != (const string & lhoperand, const CBigInt & rhoperand);
 
        	// output operator <<
 	friend ostream & operator << (ostream & os, const CBigInt &x);
@@ -337,15 +337,14 @@ CBigInt CBigInt::operator + (const string & addendum2) const
 	return *this + b;
 }
 
-CBigInt operator + (int addendum1, CBigInt addendum2)
+CBigInt operator + (int addendum1, const CBigInt & addendum2)
 {
-	return 0;
+	return addendum2 + addendum1;
 }
 
-CBigInt operator + (string addendum1, CBigInt addendum2)
+CBigInt operator + (const string & addendum1, const CBigInt & addendum2)
 {
-	cout << "I can do string + CBigInt" << endl;
-	return 0;
+	return addendum2 + addendum1;
 }
 
 // Helper for multiplier by one digit
@@ -412,22 +411,20 @@ CBigInt CBigInt::operator *(int factor2) const
 	return *this * b;
 }
 
-CBigInt CBigInt::operator * (const string & factor2) const
+CBigInt CBigInt::operator *(const string & factor2) const
 {
 	CBigInt b(factor2);
 	return *this * b;
 }
 
-CBigInt operator * (int factor1, CBigInt factor2)
+CBigInt operator * (int factor1, const CBigInt & factor2)
 {
-	cout << "I can do int * CBigInt" << endl;
-	return 0;
+	return factor2 * factor1;
 }
 
-CBigInt operator * (string factor1, CBigInt factor2)
+CBigInt operator * (const string & factor1, const CBigInt & factor2)
 {
-	cout << "I can do string * CBigInt" << endl;
-	return 0;
+	return factor2 * factor1;
 }
 
 // CBigInt += int
@@ -499,6 +496,9 @@ bool CBigInt::operator < (const CBigInt & rhoperand) const
 	}
 	if (this->m_Positive == false && rhoperand.m_Positive == false) {
 		// - and -
+		if (this->m_Number == rhoperand.m_Number) {
+			return false;
+		}
 		return !(this->cmpabsless(rhoperand));
 	}
 	// + and +
@@ -517,16 +517,16 @@ bool CBigInt::operator < (const string & rhoperand) const
 	return *this < b;
 }
 
-bool operator < (int lhoperand, CBigInt rhoperand)
+bool operator < (int lhoperand, const CBigInt & rhoperand)
 {
-	cout << "I can do int < CBigInt" << endl;
-	return 0;
+	CBigInt b(lhoperand);
+	return b < rhoperand;
 }
 
-bool operator < (string lhoperand, CBigInt rhoperand)
+bool operator < (const string & lhoperand, const CBigInt & rhoperand)
 {
-	cout << "I can do string < CBigInt" << endl;
-	return 0;
+	CBigInt b(lhoperand);
+	return b < rhoperand;
 }
 
 bool CBigInt::operator <= (const CBigInt & rhoperand) const
@@ -547,13 +547,19 @@ bool CBigInt::operator <= (int rhoperand) const
 bool CBigInt::operator <= (const string & rhoperand) const
 {
 	CBigInt b(rhoperand);
-	return *this <= b;;
+	return *this <= b;
 }
 
-bool operator <= (int lhoperand, CBigInt rhoperand)
+bool operator <= (int lhoperand, const CBigInt & rhoperand)
 {
-	cout << "I can do int < CBigInt" << endl;
-	return 0;
+	CBigInt b(lhoperand);
+	return b <= rhoperand;
+}
+
+bool operator <= (const string & lhoperand, const CBigInt & rhoperand)
+{
+	CBigInt b(lhoperand);
+	return b <= rhoperand;
 }
 
 bool CBigInt::operator > (const CBigInt & rhoperand) const
@@ -573,10 +579,14 @@ bool CBigInt::operator > (const string & rhoperand) const
 	return b < *this;
 }
 
-bool operator > (int lhoperand, CBigInt rhoperand)
+bool operator > (int lhoperand, const CBigInt & rhoperand)
 {
-	cout << "I can do int < CBigInt" << endl;
-	return 0;
+	return CBigInt(lhoperand) > rhoperand;
+}
+
+bool operator > (const string & lhoperand, const CBigInt & rhoperand)
+{
+	return CBigInt(lhoperand) > rhoperand;
 }
 
 bool CBigInt::operator >= (const CBigInt & rhoperand) const
@@ -596,10 +606,14 @@ bool CBigInt::operator >= (const string & rhoperand) const
 	return *this >= b;
 }
 
-bool operator >= (int lhoperand, CBigInt rhoperand)
+bool operator >= (int lhoperand, const CBigInt & rhoperand)
 {
-	cout << "I can do int >= CBigInt" << endl;
-	return 0;
+	return CBigInt(lhoperand) >= rhoperand;
+}
+
+bool operator >= (const string & lhoperand, const CBigInt & rhoperand)
+{
+	return CBigInt(lhoperand) >= rhoperand;
 }
 
 bool CBigInt::operator == (const CBigInt & rhoperand) const
@@ -619,16 +633,14 @@ bool CBigInt::operator == (const string & rhoperand) const
 	return *this == b;
 }
 
-bool operator == (int lhoperand, CBigInt rhoperand)
+bool operator == (int lhoperand, const CBigInt & rhoperand)
 {
-	cout << "I can do int == CBigInt" << endl;
-	return 0;
+	return CBigInt(lhoperand) == rhoperand;
 }
 
-bool operator == (string lhoperand, CBigInt rhoperand)
+bool operator == (const string & lhoperand, const CBigInt & rhoperand)
 {
-	cout << "I can do string == CBigInt" << endl;
-	return 0;
+	return CBigInt(lhoperand) == rhoperand;
 }
 
 bool CBigInt::operator != (const CBigInt & rhoperand) const
@@ -648,16 +660,14 @@ bool CBigInt::operator != (const string & rhoperand) const
 	return *this != b;
 }
 
-bool operator != (int lhoperand, CBigInt rhoperand)
+bool operator != (int lhoperand, const CBigInt & rhoperand)
 {
-	cout << "I can do int != CBigInt" << endl;
-	return 0;
+	return CBigInt(lhoperand) != rhoperand;
 }
 
-bool operator != (string lhoperand, CBigInt rhoperand)
+bool operator != (const string & lhoperand, const CBigInt & rhoperand)
 {
-	cout << "I can do string != CBigInt" << endl;
-	return 0;
+	return CBigInt(lhoperand) != rhoperand;
 }
 
 ostream & operator << (ostream & os, const CBigInt &x)
@@ -741,6 +751,31 @@ static bool equal ( const CBigInt & x, const char * val )
 }
 int main ( void )
 {
+	assert(10 < CBigInt(11));
+	assert("-25" < CBigInt("-24"));
+
+	assert(11 <= CBigInt(11));
+	assert("-25" <= CBigInt("25"));
+
+	assert(10 > CBigInt(9));
+	assert(!("-25" > CBigInt("-25")));
+
+	assert(10 >= CBigInt(9));
+	assert("-25" >= CBigInt("-50"));
+
+	assert(10 == CBigInt(10));
+	assert(!("-25" == CBigInt("15")));
+
+	assert(10 != CBigInt(11));
+	assert(!("-25" != CBigInt("-25")));
+
+	assert(10 * CBigInt(11) == CBigInt(110));
+	assert("-25" * CBigInt("-24") == CBigInt(-25 * -24));
+
+	assert(10 + CBigInt(11) == CBigInt(21));
+	assert("-25" + CBigInt("-24") == CBigInt(-25 + -24));
+
+	
   CBigInt a, b;
   istringstream is;
   a = 10;

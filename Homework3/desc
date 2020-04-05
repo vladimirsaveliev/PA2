@@ -69,11 +69,22 @@ as previously stated, the second bonus is rather laborious. On the other hand, i
 One more test case in the example tests.
 
 /usr/bin/ld: /tmp/cctUToHb.o: in function `void testRelOp<char [100], char [100], teacher_9bc6f8cd47c35813702d7960d55c77bd::CBigInt, student_7de3acf7abd75eca42fedb4db7b963d2::CBigInt>(char const (&) [100], char const (&) [100], teacher_9bc6f8cd47c35813702d7960d55c77bd::CBigInt const&, student_7de3acf7abd75eca42fedb4db7b963d2::CBigInt const&, int&, int&)':
-testbed.cpp:(.text._Z9testRelOpIA100_cS0_N40teacher_9bc6f8cd47c35813702d7960d55c77bd7CBigIntEN40student_7de3acf7abd75eca42fedb4db7b963d27CBigIntEEvRKT_RKT0_RKT1_RKT2_RiSH_[_Z9testRelOpIA100_cS0_N40teacher_9bc6f8cd47c35813702d7960d55c77bd7CBigIntEN40student_7de3acf7abd75eca42fedb4db7b963d27CBigIntEEvRKT_RKT0_RKT1_RKT2_RiSH_]+0x12e): undefined reference to `student_7de3acf7abd75eca42fedb4db7b963d2::operator<=(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, student_7de3acf7abd75eca42fedb4db7b963d2::CBigInt)'
+testbed.cpp:(.text._Z9testRelOpIA100_cS0_N40teacher_9bc6f8cd47c35813702d7960d55c77bd7CBigIntEN40student_7de3acf7abd75eca42fedb4db7b963d27CBigIntEEvRKT_RKT0_RKT1_RKT2_RiSH_[_Z9testRelOpIA100_cS0_N40teacher_9bc6f8cd47c35813702d7960d55c77bd7CBigIntEN40student_7de3acf7abd75eca42fedb4db7b963d27CBigIntEEvRKT_RKT0_RKT1_RKT2_RiSH_]+0x12e):
+
+undefined reference to `student_7de3acf7abd75eca42fedb4db7b963d2::
+operator<=(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, student_7de3acf7abd75eca42fedb4db7b963d2::CBigInt)'
 /usr/bin/ld: testbed.cpp:(.text._Z9testRelOpIA100_cS0_N40teacher_9bc6f8cd47c35813702d7960d55c77bd7CBigIntEN40student_7de3a
 
 <skipping 10 B>
 
-a42fedb4db7b963d27CBigIntEEvRKT_RKT0_RKT1_RKT2_RiSH_[_Z9testRelOpIA100_cS0_N40teacher_9bc6f8cd47c35813702d7960d55c77bd7CBigIntEN40student_7de3acf7abd75eca42fedb4db7b963d27CBigIntEEvRKT_RKT0_RKT1_RKT2_RiSH_]+0x1eb): undefined reference to `student_7de3acf7abd75eca42fedb4db7b963d2::operator>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, student_7de3acf7abd75eca42fedb4db7b963d2::CBigInt)'
-/usr/bin/ld: testbed.cpp:(.text._Z9testRelOpIA100_cS0_N40teacher_9bc6f8cd47c35813702d7960d55c77bd7CBigIntEN40student_7de3acf7abd75eca42fedb4db7b963d27CBigIntEEvRKT_RKT0_RKT1_RKT2_RiSH_[_Z9testRelOpIA100_cS0_N40teacher_9bc6f8cd47c35813702d7960d55c77bd7CBigIntEN40student_7de3acf7abd75eca42fedb4db7b963d27CBigIntEEvRKT_RKT0_RKT1_RKT2_RiSH_]+0x2ad): undefined reference to `student_7de3acf7abd75eca42fedb4db7b963d2::operator>=(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, student_7de3acf7abd75eca42fedb4db7b963d2::CBigInt)'
+a42fedb4db7b963d27CBigIntEEvRKT_RKT0_RKT1_RKT2_RiSH_[_Z9testRelOpIA100_cS0_N40teacher_9bc6f8cd47c35813702d7960d55c77bd7CBigIntEN40student_7de3acf7abd75eca42fedb4db7b963d27CBigIntEEvRKT_RKT0_RKT1_RKT2_RiSH_]+0x1eb):
+
+undefined reference to `student_7de3acf7abd75eca42fedb4db7b963d2::
+operator>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, student_7de3acf7abd75eca42fedb4db7b963d2::CBigInt)'
+
+/usr/bin/ld: testbed.cpp:(.text._Z9testRelOpIA100_cS0_N40teacher_9bc6f8cd47c35813702d7960d55c77bd7CBigIntEN40student_7de3acf7abd75eca42fedb4db7b963d27CBigIntEEvRKT_RKT0_RKT1_RKT2_RiSH_[_Z9testRelOpIA100_cS0_N40teacher_9bc6f8cd47c35813702d7960d55c77bd7CBigIntEN40student_7de3acf7abd75eca42fedb4db7b963d27CBigIntEEvRKT_RKT0_RKT1_RKT2_RiSH_]+0x2ad):
+
+undefined reference to `student_7de3acf7abd75eca42fedb4db7b963d2::
+
+operator>=(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, student_7de3acf7abd75eca42fedb4db7b963d2::CBigInt)'
 collect2: error: ld returned 1 exit status
