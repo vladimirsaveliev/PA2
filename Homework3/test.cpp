@@ -256,7 +256,7 @@ CBigInt CBigInt::add(const CBigInt &addendum2) const
 	}
 
 	res.m_Positive = this->m_Positive;
-	cout << *this << " + " << addendum2 << " = "  << res << endl;
+//	cout << *this << " + " << addendum2 << " = "  << res << endl;
 	return res;
 }
 
@@ -317,7 +317,7 @@ CBigInt CBigInt::operator - (const CBigInt &sub) const
 	// Determine sign of result
 	res.m_Positive = this->m_Positive;
 
-	cout << *this << " - " << sub << " = "  << res << endl;
+//	cout << *this << " - " << sub << " = "  << res << endl;
        	return res;
 }
 
@@ -402,7 +402,7 @@ CBigInt CBigInt::operator *(const CBigInt & factor2) const
 
 	// Sort out sign of result
 	res.m_Positive = this->m_Positive == factor2.m_Positive;
-	cout << *this << " * " << factor2  << " = " << res << endl;
+//	cout << *this << " * " << factor2  << " = " << res << endl;
 	return res;
 }
 
@@ -564,13 +564,13 @@ bool CBigInt::operator > (const CBigInt & rhoperand) const
 bool CBigInt::operator > (int rhoperand) const
 {
 	CBigInt b(rhoperand); 
-	return rhoperand < *this;
+	return b < *this;
 }
 
 bool CBigInt::operator > (const string & rhoperand) const
 {
 	CBigInt b(rhoperand); 
-	return rhoperand < *this;
+	return b < *this;
 }
 
 bool operator > (int lhoperand, CBigInt rhoperand)
