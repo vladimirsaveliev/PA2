@@ -60,9 +60,9 @@ class CBigInt
 	CBigInt & operator *=(const string & rhoperand);
 	
 	// comparison operators, any combination {CBigInt/int/string} {<,<=,>,>=,==,!=} {CBigInt/int/string}
-	bool operator < (CBigInt rhoperand) const;
+	bool operator < (const CBigInt & rhoperand) const;
 	bool operator < (int rhoperand) const;
-	bool operator < (string rhoperand) const;
+	bool operator < (const string & rhoperand) const;
 	friend bool operator < (int lhoperand, CBigInt rhoperand);
 	friend bool operator < (string lhoperand, CBigInt rhoperand);
 
@@ -487,22 +487,21 @@ bool CBigInt::cmpabsless(const CBigInt &rhoperand) const
 	return this->m_Number.size() < rhoperand.m_Number.size();
 }
 
-bool CBigInt::operator < (CBigInt rhoperand) const
+bool CBigInt::operator < (const CBigInt & rhoperand) const
 {
-	cout << "I can do CBigInt < CBigInt" << endl; 
-	return 0;
+	return this->cmpabsless(rhoperand);
 }
 
 bool CBigInt::operator < (int rhoperand) const
 {
-	cout << "I can do CBigInt < int" << endl;
-	return 0;
+	CBigInt b(rhoperand);
+	return *this < b;
 }
 
-bool CBigInt::operator < (string rhoperand) const
+bool CBigInt::operator < (const string & rhoperand) const
 {
-	cout << "I can do CBigInt < string" << endl;
-	return 0;
+	CBigInt b(rhoperand);
+	return *this < b;
 }
 
 bool operator < (int lhoperand, CBigInt rhoperand)
