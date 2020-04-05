@@ -43,19 +43,19 @@ class CBigInt
 	CBigInt operator - (const CBigInt &sub) const;
 
 	// operator *, any combination {CBigInt/int/string} * {CBigInt/int/string}
-	CBigInt operator * (CBigInt factor2) const;
+	CBigInt operator * (const CBigInt & factor2) const;
 	CBigInt operator * (int factor2) const;
-	CBigInt operator * (string factor2) const;
+	CBigInt operator * (const string & factor2) const;
 	friend CBigInt operator * (int factor1, CBigInt factor2);
 	friend CBigInt operator * (string factor1, CBigInt factor2);
 	// operator +=, any of {CBigInt/int/string}
-	CBigInt operator += (int rhoperand);
-	CBigInt operator += (CBigInt rhoperand);
-	CBigInt operator += (string rhoperand);
+	CBigInt & operator +=(int rhoperand);
+	CBigInt & operator +=(const CBigInt & rhoperand);
+	CBigInt & operator +=(const string & rhoperand);
 	// operator *=, any of {CBigInt/int/string}
-	CBigInt operator *= (int rhoperand);
-	CBigInt operator *= (CBigInt rhoperand);
-	CBigInt operator *= (string rhoperand);
+	CBigInt & operator *=(int rhoperand);
+	CBigInt & operator *=(const CBigInt & rhoperand);
+	CBigInt & operator *=(const string & rhoperand);
 	
 	// comparison operators, any combination {CBigInt/int/string} {<,<=,>,>=,==,!=} {CBigInt/int/string}
 	bool operator < (CBigInt rhoperand) const;
@@ -314,7 +314,9 @@ CBigInt CBigInt::operator - (const CBigInt &sub) const
 
 CBigInt CBigInt::operator + (int addendum2) const
 {
-	return 0;
+	CBigInt b(addendum2);
+	
+	return *this + b;
 }
 
 CBigInt CBigInt::operator + (string addendum2) const
@@ -353,12 +355,11 @@ CBigInt CBigInt::multbydigit(int mult) const
 	if (carry > 0) {
 		res.m_Number.insert(res.m_Number.begin(), carry + '0');
 	}
-	cout << *this << " * " << mult << " = "  << res << endl;
 	return res;
 }
 
 // returns CBigInt
-CBigInt CBigInt::operator *(CBigInt factor2) const
+CBigInt CBigInt::operator *(const CBigInt & factor2) const
 {
 	string::const_reverse_iterator it;
 	const string &a = factor2.m_Number;
@@ -386,20 +387,22 @@ CBigInt CBigInt::operator *(CBigInt factor2) const
 	       	res.m_Number.erase(it3);
 	}
 
+	// Sort out sign of result
+	res.m_Positive = this->m_Positive == factor2.m_Positive;
 	cout << *this << " * " << factor2  << " = " << res << endl;
-	return 0;
+	return res;
 }
 
-CBigInt CBigInt::operator * (int factor2) const
+CBigInt CBigInt::operator *(int factor2) const
 {
-	cout << "I can do CBigInt + int" << endl;
-	return 0;
+	CBigInt b(factor2); 
+	return *this * b;
 }
 
-CBigInt CBigInt::operator * (string factor2) const
+CBigInt CBigInt::operator * (const string & factor2) const
 {
-	cout << "I can do CBigInt + string" << endl;
-	return 0;
+	CBigInt b(factor2);
+	return *this * b;
 }
 
 CBigInt operator * (int factor1, CBigInt factor2)
@@ -414,40 +417,42 @@ CBigInt operator * (string factor1, CBigInt factor2)
 	return 0;
 }
 
-CBigInt CBigInt::operator += (int rhoperand)
+CBigInt & CBigInt::operator += (int rhoperand)
 {
-	cout << "I can do CBigInt += int" << endl;
-	return 0;
+	CBigInt b(rhoperand);
+	*this = *this + b;
+	return *this;
 }
 
-CBigInt CBigInt::operator += (CBigInt rhoperand)
+CBigInt & CBigInt::operator +=(const CBigInt &rhoperand)
 {
 	cout << "I can do CBigInt += CBigInt" << endl;
-	return 0;
+	return *this;
 }
 
-CBigInt CBigInt::operator += (string rhoperand)
+CBigInt & CBigInt::operator +=(const string &rhoperand)
 {
 	cout << "I can do CBigInt + int" << endl;
-	return 0;
+	return *this;
 }
 
-CBigInt CBigInt::operator *= (int rhoperand)
+CBigInt & CBigInt::operator *=(int rhoperand)
 {
-	cout << "I can do CBigInt *= int" << endl;
-	return 0;
+	CBigInt b(rhoperand);
+	*this = *this * b;
+	return *this;
 }
 
-CBigInt CBigInt::operator *= (CBigInt rhoperand)
-{
-	cout << "I can do CBigInt + int" << endl;
-	return 0;
-}
-
-CBigInt CBigInt::operator *= (string rhoperand)
+CBigInt & CBigInt::operator *=(const CBigInt & rhoperand)
 {
 	cout << "I can do CBigInt + int" << endl;
-	return 0;
+       	return *this;
+}
+
+CBigInt & CBigInt::operator *=(const string & rhoperand)
+{
+	cout << "I can do CBigInt + int" << endl;
+	return *this;
 }
 
 // Compare absolute values of CBigInts
