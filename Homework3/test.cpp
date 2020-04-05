@@ -88,16 +88,16 @@ class CBigInt
 	friend bool operator >= (string lhoperand, CBigInt rhoperand);
 
 	// ==
-	bool operator == (CBigInt rhoperand) const;
+	bool operator == (const CBigInt & rhoperand) const;
 	bool operator == (int rhoperand) const;
-	bool operator == (string rhoperand) const;
+	bool operator == (const string & rhoperand) const;
 	friend bool operator == (int lhoperand, CBigInt rhoperand);
 	friend bool operator == (string lhoperand, CBigInt rhoperand);
 
 	// !=
-	bool operator != (CBigInt rhoperand) const;
+	bool operator != (const CBigInt & rhoperand) const;
 	bool operator != (int rhoperand) const;
-	bool operator != (string rhoperand) const;
+	bool operator != (const string & rhoperand) const;
 	friend bool operator != (int lhoperand, CBigInt rhoperand);
 	friend bool operator != (string lhoperand, CBigInt rhoperand);
 
@@ -589,22 +589,21 @@ bool operator >= (int lhoperand, CBigInt rhoperand)
 	return 0;
 }
 
-bool CBigInt::operator == (CBigInt rhoperand) const
+bool CBigInt::operator == (const CBigInt & rhoperand) const
 {
-	cout << "I can do  == CBigInt" << endl;
-	return 0;
+	return !(*this < rhoperand) && !(*this > rhoperand);
 }
 
 bool CBigInt::operator == (int rhoperand) const
 {
-	cout << "I can do  == int" << endl;
-	return 0;
+	CBigInt b(rhoperand);
+	return *this == b;
 }
 
-bool CBigInt::operator == (string rhoperand) const
+bool CBigInt::operator == (const string & rhoperand) const
 {
-	cout << "I can do == string" << endl;
-	return 0;
+	CBigInt b(rhoperand);
+	return *this == b;
 }
 
 bool operator == (int lhoperand, CBigInt rhoperand)
@@ -619,22 +618,21 @@ bool operator == (string lhoperand, CBigInt rhoperand)
 	return 0;
 }
 
-bool CBigInt::operator != (CBigInt rhoperand) const
+bool CBigInt::operator != (const CBigInt & rhoperand) const
 {
-	cout << "I can do  != CBigInt" << endl;
-	return 0;
+	return !(*this == rhoperand);
 }
 
 bool CBigInt::operator != (int rhoperand) const
 {
-	cout << "I can do != int" << endl;
-	return 0;
+	CBigInt b(rhoperand);
+	return *this != b;
 }
 
-bool CBigInt::operator != (string rhoperand) const
+bool CBigInt::operator != (const string & rhoperand) const
 {
-	cout << "I can do != string" << endl;
-	return 0;
+	CBigInt b(rhoperand);
+	return *this != b;
 }
 
 bool operator != (int lhoperand, CBigInt rhoperand)
