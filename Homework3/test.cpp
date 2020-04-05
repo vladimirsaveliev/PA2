@@ -694,9 +694,10 @@ istream & operator >> (istream  & is, CBigInt &x)
 	bool whitespaceok = true;
 	bool signok = true;
 	int lead0num = 0;
+	CBigInt y;
 
-	x.m_Number = "";
-	x.m_Positive = true;
+	y.m_Number = "";
+	y.m_Positive = true;
 
 	while ((c = is.peek()) != EOF) {
 		c = is.get();
@@ -710,7 +711,7 @@ istream & operator >> (istream  & is, CBigInt &x)
 		
 		if (signok) {
 			if (c == '-' || c == '+') {
-				x.m_Positive = (c == '+');
+				y.m_Positive = (c == '+');
 				signok = false;
 				continue;
 			}
@@ -724,19 +725,22 @@ istream & operator >> (istream  & is, CBigInt &x)
 		signok = false;
 
 		/* skip leading '0' */
-		if (x.m_Number.size() == 0 &&  c == '0') {
+		if (y.m_Number.size() == 0 &&  c == '0') {
 			lead0num++;
 			continue;
 		}
 
-		x.m_Number.push_back(c);
+		y.m_Number.push_back(c);
 	}
 
-	if (x.m_Number.size() == 0) {
+	if (y.m_Number.size() == 0) {
 		if (lead0num)
-			x.m_Number.push_back('0');
+			y.m_Number.push_back('0');
 		else
 			is.setstate(ios::failbit);
+	}
+	if (!(is.fail())) {
+		x = y;
 	}
 
 	return is;
@@ -815,11 +819,11 @@ int main ( void )
   assert ( equal ( b, "150" ) );
   assert ( equal ( a, "10" ) );
 
-// 
+
   is . clear ();
-  is . str ( "-999" );
+  is . str ( "-" );
   assert ( is >> b );
-  assert ( equal ( b, "-999" ) );
+  assert ( equal ( b, "999" ) );
 
   is . clear ();
   is . str ( " 1234" );
