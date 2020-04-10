@@ -70,9 +70,9 @@ ostream & operator <<(ostream &os, const CDarrayT<T> &arr)
 template<class T>
 CDarrayT<T>::CDarrayT()
 {
-	m_MaxSize = 1;
+	m_MaxSize = 0;
 	m_CurSize = 0;
-	m_Data = new T[m_MaxSize];
+	m_Data = NULL;
 }
 
 /*
@@ -96,6 +96,7 @@ template<class T>
 CDarrayT<T>::~CDarrayT()
 {
 	delete [] m_Data;
+	m_Data = NULL;
 }
 
 template<class T>
@@ -143,15 +144,19 @@ template<class T>
 void CDarrayT<T>::append(const T& t)
 {
 	if (m_MaxSize == m_CurSize) {
+		if (m_MaxSize == 0) {
+			m_MaxSize = 1;
+		} else {
+			m_MaxSize++;
+		}
 		/* allocate more space */
-		T* new_data = new T[m_MaxSize * 2];
+		T* new_data = new T[m_MaxSize];
 		/* copy old data to new space */
 		for (int i = 0; i < m_CurSize; i++)
 			new_data[i] = m_Data[i];
 		/* free old space, set data pointer to new space */
 		delete [] m_Data;
 		m_Data = new_data;
-		m_MaxSize *= 2;
 	}
 	m_Data[m_CurSize] = t;
 	m_CurSize++;
@@ -177,13 +182,15 @@ T& CDarrayT<T>::operator [](int idx)
 class CTransaction
 {
 public:
-	CTransaction() { } // default constructor
+	CTransaction(); // default constructor
 	CTransaction(unsigned int amount, const char *signature,
 		     const char *partner, bool debit);
+	~CTransaction();
 	bool operator == (const char * str) const { return false; }
+	CTransaction& operator =(const CTransaction &orig);
+
 	int get_amount() const { return this->m_Amount; }
 	friend ostream & operator <<(ostream &os, const CTransaction &txn);
-
 private:
 	unsigned int m_Amount;
 	char *m_Signature;
@@ -232,11 +239,10 @@ CAccount::CAccount(const char *accid, int initialbalance)
 
 CAccount::~CAccount()
 {
-	delete [] this->m_AccID;;
+	delete [] this->m_AccID;
 	this->m_AccID = NULL;
 	this->m_InitialBalance = 0;
 	this->m_Balance = 0;
-	
 }
 void CAccount::addTransaction(const CTransaction &transaction, bool debit)
 {
@@ -298,6 +304,14 @@ ostream & operator <<(ostream &os, const CAccount &acc)
 	return os;
 }
 
+CTransaction::CTransaction()
+{
+	this->m_Amount = 0;
+	this->m_Signature = NULL;
+	this->m_Partner = NULL;
+	this->m_Debit = false;
+}
+
 CTransaction::CTransaction(unsigned int amount, const char *signature,
 			   const char *partner, bool debit)
 {
@@ -311,7 +325,33 @@ CTransaction::CTransaction(unsigned int amount, const char *signature,
 	this->m_Debit = debit;
 }
 
+CTransaction::~CTransaction()
+{
+	delete [] this->m_Signature;
+	this->m_Signature = NULL;
+	delete [] this->m_Partner;
+	this->m_Partner = NULL;
+}
 
+/* deep copy operator = */
+CTransaction& CTransaction::operator =(const CTransaction &orig)
+{
+	if (&orig == this)
+		return *this;
+
+	this->m_Amount = orig.m_Amount;
+	this->m_Debit = orig.m_Debit;
+
+	delete [] this->m_Signature;
+	this->m_Signature = new char[strlen(orig.m_Signature) + 1];
+	strcpy(this->m_Signature, orig.m_Signature);
+
+	delete [] this->m_Partner;
+	this->m_Partner = new char[strlen(orig.m_Partner) + 1];
+	strcpy(this->m_Partner, orig.m_Partner);
+
+	return *this;	
+}
 
 class CBank
 {
@@ -405,8 +445,6 @@ bool CBank::Transaction(const char * debAccID, const char * credAccID,
 	// Allocate new credit transaction
 	CTransaction credt(amount, signature, debAccID, false);
 	this->m_Accounts[credidx].addTransaction(credt, false);
-
-	
 
 	return true;
 }
