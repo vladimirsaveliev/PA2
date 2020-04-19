@@ -71,11 +71,8 @@ int main()
 
 	/* this is supposed to output all 4 "harry truman"s */
 	it = find(s.begin(), s.end(), T("harry", "truman", 112312));
-	while (it != s.end()) {
-		if (!(to < *it))
-			cout << "found: " << *it << endl;
-		else
-			break;
+	while (it != s.end() && !(to < *it)) {
+		cout << "found: " << *it << endl;
 		it++;
 	}
 
